@@ -5,23 +5,22 @@ const app = express();
 
 app.use(express.json());
 
-app.listen(8080, (req, res) => console.log("Server on!"));
+app.listen(8080, () => console.log("Server on!"));
 
 const users = [];
 
-// criar conta
 app.post("/createAccount", (req, res) => {
-  const emailRepeat = users.some((user) => user.name === body.name);
+  const { name, email, password } = req.body;
+
+  const emailRepeat = users.some((user) => user.email === email);
   if (emailRepeat) {
     return res.status(400).json({
       message: `Already existing E-mail!`,
     });
   }
 
-  const { name, email, password } = req.body;
-
   const user = {
-    id: uuidv4.v4(),
+    id: uuidv4(),
     name,
     email,
     password,
@@ -31,9 +30,33 @@ app.post("/createAccount", (req, res) => {
 
   return res.status(201).json({
     message: `User successfully created!`,
+    user: user,
   });
 });
 
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  const user = users.find((user) => user.email === email);
+  const checkPassword = users.some((user) => password === user.password);
+
+  if (!user) {
+    return res.status(400).json({
+      message: `Incorrect email or password`,
+    });
+  }
+
+  if (!checkPassword) {
+    return res.status(400).json({
+      message: `Incorrect email or password`,
+    });
+  }
+
+  res.status(200).json({
+    message: `Welcome ${user.name}!`,
+    userId: user.id,
+  });
+});
 
 
 // Aplicação Lista de Recados
