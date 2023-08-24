@@ -58,6 +58,31 @@ app.post("/login", (req, res) => {
   });
 });
 
+app.post("/createMessages", (req, res) => {
+  const { userId, title, description } = req.body;
+
+  const user = users.find((user) => user.id === userId);
+
+  if (!user) {
+    return res.status(404).json({
+      message: `User not found.`,
+    });
+  }
+
+  const addedMessage = {
+    id: uuidv4(),
+    title,
+    description,
+    userId,
+  };
+
+  user.messages.push(addedMessage);
+
+  res.status(201).json({
+    message: `Message successfully added!`,
+    addedMessage,
+  });
+});
 
 // Aplicação Lista de Recados
 
