@@ -37,20 +37,7 @@ app.post("/createAccount", (req, res) => {
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  const user = users.find((user) => user.email === email);
-  const checkPassword = users.some((user) => password === user.password);
-
-  if (!user) {
-    return res.status(400).json({
-      message: `Incorrect email or password`,
-    });
-  }
-
-  if (!checkPassword) {
-    return res.status(400).json({
-      message: `Incorrect email or password`,
-    });
-  }
+  const user = checkLogin(email, password, res);
 
   res.status(200).json({
     message: `Welcome ${user.name}!`,
@@ -61,13 +48,7 @@ app.post("/login", (req, res) => {
 app.post("/createMessages", (req, res) => {
   const { userId, title, description } = req.body;
 
-  const user = users.find((user) => user.id === userId);
-
-  if (!user) {
-    return res.status(404).json({
-      message: `User not found.`,
-    });
-  }
+  const user = findUserById(userId, res);
 
   const addedMessage = {
     id: uuidv4(),
@@ -84,33 +65,36 @@ app.post("/createMessages", (req, res) => {
   });
 });
 
-// Aplicação Lista de Recados
+app.get("/readMessages/:userId", (req, res) => {
+  const { userId } = req.params;
 
-// ● Vamos criar um back-end que contém
-// as seguintes funcionalidades:
-// ○ Criação de conta
-// ○ Login
-// ○ CRUD* de recados
+  const user = findUserById(userId, res);
 
-// ● Dados de um usuário:
-// ○ Identificador
-// ○ Nome
-// ○ E-mail
-// ○ Senha
+  const myMessages = user.messages.filter((message) => message.userId === userId);
 
-// O que vamos fazer?
+  res.status(200).json({ myMessages });
+});
 
-// ● Dados de um recado:
-// ○ Identificador
-// ○ Título
-// ○ Descrição
+function findUserById(userId, res) {
+  const user = users.find((user) => user.id === userId);
 
-// Regras
-// ● Não pode ter mais de um usuário
-// com o mesmo e-mail
+  if (!user) {
+    res.status(404).json({
+      message: `User not found.`,
+    })
+    return null
+  }
+  return user
+}
 
-// ● O login deve ser feito com e-mail e
-// senha
+function checkLogin(email, password, res) {
+const user = users.find((user) => user.email === email && user.password === password);
 
-// ● Cada recado deve ser de um único
-// usuário.
+  if (!user) {
+    res.status(400).json({
+      message: `Incorrect email or password`,
+    });
+    return null
+  }
+  return user
+}
