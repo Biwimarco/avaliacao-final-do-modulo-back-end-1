@@ -19,19 +19,23 @@ app.post("/createAccount", (req, res) => {
     });
   }
 
-  const user = {
-    id: uuidv4(),
-    name,
-    email,
-    password,
-    messages: [],
-  };
-  users.push(user);
+  return !name || !email || !password
+    ? res.status(400).json({ message: `Fill in the requested fields!` })
+    : (() => {
+        const user = {
+          id: uuidv4(),
+          name,
+          email,
+          password,
+          messages: [],
+        };
+        users.push(user);
 
-  return res.status(201).json({
-    message: `User successfully created!`,
-    user: user,
-  });
+        return res.status(201).json({
+          message: `User successfully created!`,
+          user: user,
+        });
+      })();
 });
 
 app.post("/login", (req, res) => {
@@ -48,6 +52,7 @@ app.post("/login", (req, res) => {
 app.post("/createMessages", (req, res) => {
   const { userId, title, description } = req.body;
 
+  confirmMessages(userId, title, description, res);
   const user = findUserById(userId, res);
 
   const addedMessage = {
@@ -70,9 +75,35 @@ app.get("/readMessages/:userId", (req, res) => {
 
   const user = findUserById(userId, res);
 
-  const myMessages = user.messages.filter((message) => message.userId === userId);
+  const myMessages = user.messages.filter(
+    (message) => message.userId === userId
+  );
 
   res.status(200).json({ myMessages });
+});
+
+app.put("/updateMessages/:messageId", (req, res) => {
+  const { messageId } = req.params;
+  const { userId, title, description } = req.body;
+
+  confirmMessages(userId, title, description, res);
+  const user = findUserById(userId, res);
+  const findMessageIndex = user.messages.findIndex(
+    (message) => message.id === messageId
+  );
+
+  if (findMessageIndex === -1) {
+    return res.status(404).json({
+      message: `Message not found!`,
+    });
+  }
+
+  user.messages[findMessageIndex].title = title;
+  user.messages[findMessageIndex].description = description;
+
+  res.status(200).json({
+    message: `Updated message!`,
+  });
 });
 
 function findUserById(userId, res) {
@@ -80,21 +111,32 @@ function findUserById(userId, res) {
 
   if (!user) {
     res.status(404).json({
-      message: `User not found.`,
-    })
-    return null
+      message: `User not found!`,
+    });
+    return null;
   }
-  return user
+  return user;
 }
 
 function checkLogin(email, password, res) {
-const user = users.find((user) => user.email === email && user.password === password);
+  const user = users.find(
+    (user) => user.email === email && user.password === password
+  );
 
   if (!user) {
     res.status(400).json({
-      message: `Incorrect email or password`,
+      message: `Incorrect email or password!`,
     });
-    return null
+    return null;
   }
-  return user
+  return user;
+}
+
+function confirmMessages(userId, title, description, res) {
+  if (!userId || !title || !description) {
+    res.status(400).json({
+      message: `Fill in the requested fields!`,
+    });
+    return null;
+  }
 }
