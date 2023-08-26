@@ -88,23 +88,38 @@ app.put("/updateMessages/:messageId", (req, res) => {
 
   confirmMessages(userId, title, description, res);
   const user = findUserById(userId, res);
-  const findMessageIndex = user.messages.findIndex(
-    (message) => message.id === messageId
-  );
+  const findMsgIndex = findMessageIndex(user, messageId, res)
 
-  if (findMessageIndex === -1) {
-    return res.status(404).json({
-      message: `Message not found!`,
-    });
-  }
-
-  user.messages[findMessageIndex].title = title;
-  user.messages[findMessageIndex].description = description;
+  user.messages[findMsgIndex].title = title;
+  user.messages[findMsgIndex].description = description;
 
   res.status(200).json({
     message: `Updated message!`,
   });
 });
+
+app.delete("/deleteMessages/:messageId", (req, res) => {
+  const { messageId } = req.params;
+  const { userId } = req.body;
+
+  const user = findUserById(userId, res);
+
+  const messageToDelete = user.messages.find((message) => message.id === messageId);
+
+  if (!messageToDelete) {
+    res.status(404).json({
+      message: `Message not found!`,
+    })
+    return 
+  }
+
+  user.messages = user.messages.filter((message) => message.id !== messageId)
+
+  res.status(200).json({
+    message: "Message deleted successfully!",
+    deletedMessage: messageToDelete
+  })  
+})
 
 function findUserById(userId, res) {
   const user = users.find((user) => user.id === userId);
@@ -139,4 +154,18 @@ function confirmMessages(userId, title, description, res) {
     });
     return null;
   }
+}
+
+function findMessageIndex(user, messageId, res) {
+  const messageIndex = user.messages.findIndex(
+    (message) => message.id === messageId
+  );
+
+  if (messageIndex === -1) {
+     res.status(404).json({
+      message: `Message not found!`,
+    });
+    return null;
+  }
+  return messageIndex
 }
