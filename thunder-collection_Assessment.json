@@ -1,0 +1,118 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "Assessment",
+    "dateExported": "2023-08-29T01:01:00.251Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "73b5fbf0-f696-4826-9b49-03cbde2cb8bd",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Acc creation",
+            "url": "https://atividade-final-back-end-wyuv.onrender.com/createAccount",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-08-23T22:37:33.430Z",
+            "modified": "2023-08-29T00:53:06.724Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"g\",\n  \"email\": \"g\",\n  \"password\": \"g\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "2e463e8d-a2e1-4262-b910-41ae5b066775",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Login",
+            "url": "localhost:8080/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-08-24T02:27:47.058Z",
+            "modified": "2023-08-26T21:52:16.552Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"g\",\n  \"password\": \"g\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "ff6ca28b-52c4-498c-a3f2-1ff82906abe6",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Message creation",
+            "url": "localhost:8080/createMessages",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2023-08-24T03:44:21.787Z",
+            "modified": "2023-08-26T21:51:40.724Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"userId\": \"4009cdfe-fb4a-43ce-b973-7304f373f7c2\",\n  \"title\": \"g\",\n  \"description\" : \"g\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "24ec7da1-7dfd-41b2-980b-e983f969e403",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Read messages",
+            "url": "localhost:8080/readMessages/4009cdfe-fb4a-43ce-b973-7304f373f7c2",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-08-25T19:50:07.853Z",
+            "modified": "2023-08-26T21:51:44.925Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "2b4c5327-1498-42e5-ad3d-554c8329fc6c",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Update messages",
+            "url": "localhost:8080/updateMessages/4a9f05c9-3cf0-4c49-a8f9-56023a94143b",
+            "method": "PUT",
+            "sortNum": 60000,
+            "created": "2023-08-26T01:28:54.768Z",
+            "modified": "2023-08-26T21:46:32.712Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n  \"userId\": \"44e4e158-2d64-47de-9d91-36d446756352\",\n  \"title\": \"recado m1 att\",\n  \"description\" : \"recado m1 att\"\n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "1b64a32f-e422-417d-a728-e74753a58bf8",
+            "colId": "e5a69e9f-f687-45d8-ac5d-d05f40fc240e",
+            "containerId": "",
+            "name": "Delete messages",
+            "url": "localhost:8080/deleteMessages/5ee36e7b-505f-4919-95b7-1521a33ed27c",
+            "method": "DELETE",
+            "sortNum": 70000,
+            "created": "2023-08-26T17:59:20.951Z",
+            "modified": "2023-08-26T21:52:05.824Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"userId\": \"4009cdfe-fb4a-43ce-b973-7304f373f7c2\"\n}",
+                "form": []
+            },
+            "tests": []
+        }
+    ]
+}
